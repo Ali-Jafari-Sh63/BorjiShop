@@ -1,0 +1,129 @@
+﻿@using BorjiShop.Models
+@using BorjiShop.BLL
+
+@model List<BorjiShop.Models.Message>
+@{
+    ViewBag.Title = "مدیریت پیام ها";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int lastPage = ViewBag.LastPage;
+    int currentPage = ViewBag.CurrentPage;
+}
+
+@section panelName
+{مدیریت پیام ها}
+
+@if (Model.Count() == 0)
+{
+    <div><p>پیامی ثبت نشده است.</p></div>
+}
+else
+{
+    <table class="table">
+        <thead id="tableHead">
+            <tr>
+                <td>فرستنده</td>
+                <td>پست الکترونیک</td>
+                <td>زمان دریافت پیام</td>
+                <td>خوانده شده</td>
+                <td>پاسخ داده شده</td>
+                <td>متن پیام</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            @foreach (Message item in Model)
+            {
+                <tr>
+                    <td>@item.FullName</td>
+                    <td>@item.Email</td>
+                    <td>@PublicFunction.CalculatDate(item.Date)</td>
+                    <td>
+                        @{
+                            if (item.Read)
+                            {
+                                <img src="~/Content/Images/Admin/tick.png" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/Images/Admin/cancel.png" />
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (item.Answered)
+                            {
+                                <img src="~/Content/Images/Admin/tick.png" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/Images/Admin/cancel.png" />
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (item.Text.Length > 50)
+                            {
+                                @(string.Concat(item.Text.Substring(0, 25), " ..."))
+                            }
+                            else
+                            {
+                                @item.Text
+                            }
+                        }
+                    </td>
+                    <td><a href="@Url.Action("ReadMessage","Message", new {id =@item.ID, page =@currentPage})">خواندن پیام</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="text-center">
+        <nav aria-label="Page navigation">
+            <ul id="pagination" class="pagination">
+                @if (lastPage != 1)
+                {
+                    if (currentPage != 1)
+                    {
+                        <li>
+                            <a class="common-btn" aria-label="Previous" href="@Url.Action("Index", "Message", new {page = 1})">
+                                <span data-toggle="tooltip" data-placement="top" title="صفحه 1" aria-hidden="true" style="color: #5C6250;">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <li>
+
+                            <a class="common-btn" aria-label="Previous" href="@Url.Action("Index", "Message", new {page = currentPage - 1})">
+                                <span aria-hidden="true" style="color: #5C6250;">&lt;</span>
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <span id="currentPage" class="common-btn" style="color: #5C6250; cursor: text;">@currentPage</span>
+                    </li>
+                    if (currentPage != lastPage)
+                    {
+                        <li>
+                            <a class="common-btn" aria-label="Next" href="@Url.Action("Index", "Message", new {page = currentPage + 1})">
+                                <span aria-hidden="true" style="color: #5C6250;">&gt;</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="common-btn" aria-label="Next" href="@Url.Action("Index", "Message", new {page = lastPage})">
+                                <span data-toggle='tooltip' data-placement='top' title="صفحه @lastPage" aria-hidden="true" style="color: #5C6250;">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li>
+                        <span id="currentPage" class="common-btn hidden-element" style="color: #5C6250; cursor: text;">@currentPage</span>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+}
+
+<script src="~/RequestScript/Message.js"></script>
+

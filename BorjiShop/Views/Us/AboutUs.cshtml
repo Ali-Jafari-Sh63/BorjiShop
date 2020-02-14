@@ -1,0 +1,113 @@
+﻿@using BorjiShop.Models
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>فروشگاه برجی::درباره ما</title>
+    <link rel="icon" type="image/png" href="/Content/Images/Main-Picture/favicon.png" />
+    <link rel="stylesheet" href="/Content/Styles/bootstrap.rtl.css" />
+    <link rel="stylesheet" href="/Content/Styles/animate.min.css" />
+    <link rel="stylesheet" href="/Content/Styles/bootstrap-dropdownhover.min.css" />
+    <link rel="stylesheet" href="/Content/Styles/hover.css" />
+    <link rel="stylesheet" href="/Content/Styles/font-awesome.css" />
+    <link rel="stylesheet" href="/Content/Styles/mainstyle.css" />
+    <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .article-custom {
+            margin-top: 30px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .article-custom h4{
+            margin-top: 20px;
+            margin-bottom: 20px;
+            color: #0842ec;
+        }
+
+    </style>
+</head>
+<body>
+    @*<div class="row usHeader text-center">
+            <br />
+            <h2><a style="color: #000;" href="/">فروشگاه آنلاین قطعات موبایل برجی</a></h2>
+            <br />
+        </div>*@
+<nav class="navbar navbar-custom">
+    <div class="container-fluid main-menu-container">
+        <!--logo-->
+        <div class="navbar-brand pull-right navbar-brand-custom">
+            <a href="/">
+                <img src="/Content/Images/Main-Picture/logo.png" class="img-responsive" />
+            </a>
+        </div>
+        <!--end of logo-->
+        <div class="navbar-header navbar-header-custom pull-left">
+            <button type="button" class="navbar-toggle navbar-toggle-custom" data-toggle="collapse" data-target="#menu">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-header pull-left navbar-header-left">
+            @if (Session["User"] == null)
+            {
+                <a href="#" data-toggle="modal" data-target="#login-modal">ورود / عضویت</a>
+            }
+            else
+            {
+                User user = (User)Session["User"];
+                <ul class="nav navbar-nav navbar-nav-custom">
+                    <li class="dropdown" style="margin-top: -14px;">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            &nbsp;@user.FirstName @user.LastName&nbsp;<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu sub-menu">
+                            <li value=""><a href="@Url.Action("UserProfile","Users",new {id=user.ID})"><span style="font-size: 16px;"><i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;</span>پروفایل</a></li>
+                            <li><a href="#" onclick="logOut();"><span style="font-size: 16px;"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;&nbsp;</span>خروج از حساب کاربری</a></li>
+                        </ul>
+                    </li>
+                    <li><span>|</span></li>
+                    <li style="margin-top: -14px;"><a href="@Url.Action("Index","ShoppingCart")"><span style="font-size: 20px; color: #0842EC;"><i class="fa fa-shopping-cart"></i><div style="font-size: 10px;" class="pull-left" id="countShopCart"></div></span></a></li>
+                </ul>
+            }
+        </div>
+        <div class="collapse navbar-collapse navbar-collapse-custom" id="menu" data-hover="dropdown"
+             data-animations="zoomIn zoomIn zoomIn zoomIn">
+            <ul class="nav navbar-nav navbar-nav-custom">
+                <li><a class="hvr-underline-from-center" href="/">صفحه اصلی</a></li>
+                <li><a class="hvr-underline-from-center" href="@Url.Action("AboutUs","Us")">درباره ما</a></li>
+                <li><a class="hvr-underline-from-center" href="@Url.Action("ContactUs","Us")">تماس با ما</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<article class="col-md-8 col-md-offset-2 text-justify article-custom">
+    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. </p>
+    <h4>روش خرید و ارسال قطعه</h4>
+    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد. </p>
+</article>
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Boxes.cshtml");
+    }
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Login.cshtml");
+    }
+</body>
+</html>
+<script src="~/scripts/jquery.min.1.11.2.js"></script>
+<script src="~/scripts/bootstrap.js"></script>
+<script src="~/scripts/bootstrap-dropdownhover.min.js"></script>
+<script src="~/scripts/responsiveslides.min.js"></script>
+<script src="~/scripts/mainscript.js"></script>
+<script src="~/RequestScript/MasterLayout.js"></script>
+<script src="~/RequestScript/Home.js"></script>
+<script>
+    $(document).ready(function() {
+        hideLoader();
+    });
+</script>

@@ -1,0 +1,154 @@
+﻿@using BorjiShop.Models
+
+@{
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    User user = (User)ViewBag.User;
+}
+
+<div style="margin-top: 10px;">
+    <ul class="nav nav-tabs nav-justified">
+        <li class="active"><a data-toggle="tab" href="#profile">پروفایل</a></li>
+        <li><a data-toggle="tab" href="#changePassword">تغییر رمز عبور</a></li>
+        <li><a data-toggle="tab" href="#myOrder">سفارش های من</a></li>
+    </ul>
+
+    <div class="tab-content">
+
+        <div id="profile" class="tab-pane fade in active">
+
+            <div class="user-panel text-center col-md-10 col-xs-12 col-md-offset-1">
+                @using (Html.BeginForm("UpdateProfile", "Users", FormMethod.Post, new { @id = "form1" }))
+                {
+                    <div class="user-sub-panel text-center">
+                        <p class="pull-right">نام:</p>
+                        <div class="clearfix"></div>
+                        <h4 class="prof-lbl">@user.FirstName</h4>
+                        <input name="FirstName" id="FirstName" type="text" value="@user.FirstName" class="form-control change-pass-input hidden-element prof-input" />
+                    </div>
+                    <div class="user-sub-panel text-center">
+                        <p class="pull-right">نام خانوادگی:</p>
+                        <div class="clearfix"></div>
+                        <h4 class="prof-lbl">@user.LastName</h4>
+                        <input name="LastName" id="LastName" type="text" value="@user.LastName" class="form-control change-pass-input hidden-element prof-input" />
+                    </div>
+                    <div class="user-sub-panel text-center">
+                        <p class="pull-right">پست الکترونیک:</p>
+                        <div class="clearfix"></div>
+                        <h4 class="prof-lbl">@user.Email</h4>
+                        <input type="text" value="@user.Email" class="form-control change-pass-input hidden-element prof-input" readonly />
+                    </div>
+                    <div class="user-sub-panel text-center">
+                        <p class="pull-right">تلفن:</p>
+                        <div class="clearfix"></div>
+                        <h4 class="prof-lbl">@user.Phone</h4>
+                        <input name="Phone" id="Phone" type="text" value="@user.Phone" class="form-control change-pass-input hidden-element prof-input" />
+                    </div>
+                    <div class="col-md-10 col-xs-12 col-md-offset-1 text-center edit-profile-link">
+                        <br />
+                        <a onclick="showProfElement()" class="prof-lbl common-btn"><i class="fa fa-pencil"></i>&nbsp;&nbsp;ویرایش اطلاعات شخصی</a>
+                        <input type="submit" class="btn btn-success prof-input hidden-element" value="ثبت اطلاعات" onclick="return validateForm();" />
+                        <input onclick="hideProfElement()" type="button" class="btn btn-danger prof-input hidden-element" value="لغو" />
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div id="changePassword" class="tab-pane fade">
+            <div class="col-md-6 col-xs-12 col-md-offset-3 text-center change-pass-panel user-panel">
+                @using (Html.BeginForm("UpdatePassword", "Users", FormMethod.Post, new { @id = "form2" }))
+                {
+                    <div class="text-center">
+                        <input name="oldPassword" id="txtOldPassword" type="password" class="form-control change-pass-input" placeholder="رمز عبور فعلی خود را وارد نمایید" /><br />
+                        <input name="Password" id="txtNewPassword" type="password" class="form-control change-pass-input" placeholder="رمز عبور جدید خود را وارد نمایید" /><br />
+                        <input id="txtConfPass" type="password" class="form-control change-pass-input" placeholder="رمز عبور جدید خود را تکرار نمایید" /><br />
+                        <input type="submit" class="btn btn-success" value="تغییر رمز عبور" onclick="return validateCPForm();" />
+                        @*<input onclick="cancelCP()" type="button" class="btn btn-danger" value="لغو" />*@
+                    </div>
+                }
+            </div>
+        </div>
+        <div id="myOrder" class="tab-pane fade">
+            <p>بزودی آماده می شود...</p>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>
+<br />
+<script src="~/Scripts/jquery.min.1.11.2.js"></script>
+<script src="~/RequestScript/Users.js"></script>
+<script>
+    @*$(document).ready(function () {
+        var result = @(ViewBag.Result);
+        if (result === 1) {
+                LiteBoxShown("موفقیت", "اطلاعات شما با موفقیت اصلاح شد.", "#A2DED0", true);
+                $("#LiteBoxButtom").click(function () {
+                    closeErrorMessage();
+                });
+        }
+        if (result === 2) {
+            LiteBoxShown("خطا", "خطایی در ویرایش اطلاعات شما صورت گرفته است.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+        }
+    });*@
+
+    function validateForm() {
+        var firstName = $("#FirstName").val();
+        var lastName = $("#LastName").val();
+        var phone = $("#Phone").val();
+        if (firstName === "" && lastName === "" && phone === "") {
+            LiteBoxShown("خطا", "لطفا نام، نام خانواگی و تلفن خود را وارد نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else if (firstName === "") {
+            LiteBoxShown("خطا", "لطفا نام خود را وارد نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else if (lastName === "") {
+            LiteBoxShown("خطا", "لطفا نام خانوادگی خود را وارد نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else if (phone === "") {
+            LiteBoxShown("خطا", "لطفا شماره تماس خود را وارد نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else
+            return true;
+    }
+
+    function validateCPForm() {
+        var oldPass = $("#txtOldPassword").val();
+        var pass = $("#txtNewPassword").val();
+        var confPass = $("#txtConfPass").val();
+        if (oldPass === "") {
+            LiteBoxShown("خطا", "لطفا رمز عبور قدیمی خود را وارد نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else if (pass === "") {
+            LiteBoxShown("خطا", "لطفا رمز عبور جدید خود را وارد نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else if (pass !== confPass) {
+            LiteBoxShown("خطا", "لطفا رمز عبور جدید خود را درست تکرار نمایید.", "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function() {
+                closeErrorMessage();
+            });
+            return false;
+        } else
+            return true;
+    }
+</script>

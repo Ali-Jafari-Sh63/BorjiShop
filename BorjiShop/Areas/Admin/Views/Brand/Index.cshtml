@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "مدیریت برند";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section panelName
+{مدیریت برند}
+
+<table class="table">
+    <thead id="tablehead">
+    </thead>
+    <tbody id="reqResults"></tbody>
+</table>
+<table class="table hidden-element" id="hiddenElement">
+    <thead id="emptyTableHead">
+    </thead>
+    <tbody id="emptyTableBody">
+    </tbody>
+</table>
+<div class="text-center">
+    <nav aria-label="Page navigation">
+        <ul id="pagination" class="pagination"></ul>
+    </nav>
+</div>
+<div id="div-btn" class="text-center"></div>
+<span id="lastPage" hidden></span>
+
+
+<script type="text/javascript" src="~/RequestScript/Brand.js"></script>

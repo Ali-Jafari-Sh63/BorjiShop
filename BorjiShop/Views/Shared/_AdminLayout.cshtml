@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<meta charset="utf-8" />
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fa">
+<head>
+    <title>فروشگاه برجی - @ViewBag.title</title>
+    <!--styles-->
+    <link rel="icon" type="image/png" href="~/Content/Images/Main-Picture/favicon.png" />
+    <link rel="stylesheet" href="~/Content/Styles/bootstrap.rtl.css" />
+    <link rel="stylesheet" href="~/Content/Styles/animate.min.css" />
+    <link rel="stylesheet" href="~/Content/Styles/bootstrap-dropdownhover.min.css" />
+    <link rel="stylesheet" href="~/Content/Styles/hover.css" />
+    <link rel="stylesheet" href="~/Content/Styles/font-awesome.css" />
+    <link rel="stylesheet" href="~/Content/Styles/mainstyle.css" />
+    <!--end of styles-->
+    <!--scripts-->
+    <script src="~/Scripts/jquery.min.1.11.2.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap-dropdownhover.min.js"></script>
+    <script src="~/Scripts/responsiveslides.min.js"></script>
+    <script src="~/Scripts/mainscript.js"></script>
+    <!--end of scripts-->
+</head>
+<body>
+    <!--menu-->
+    <nav class="navbar navbar-custom">
+        <div class="container-fluid main-menu-container" style="padding-bottom:20px;">
+            <!--logo-->
+            <div class="navbar-brand pull-right navbar-brand-custom">
+                <a href="#">
+                    <img src="~/Content/Images/Main-Picture/logo.png" class="img-responsive" />
+                </a>
+            </div>
+            <!--end of logo-->
+            <div class="navbar-header pull-left navbar-header-left" style="margin-left:20px;">
+                <a href="#">خروج</a>
+            </div>
+        </div>
+    </nav>
+    <!--end of menu-->
+    <div class="col-md-10 col-xs-12 col-md-offset-1 admin-bg-info-custom text-center"><p class="info">پنل مدیریت - @RenderSection("panelName",true)</p></div>
+    <div class="main">
+        <div class="col-md-12 col-xs-12 mng-main-content">
+            <div class="row">
+                <aside class="col-xs-12 col-md-2">
+                    <ul class="pull-right" style="padding-right: 0;">
+                        <li class="admin-menu-item"><a href="@Url.Action("Index","Management")">صفحه اصلی پنل مدیریت</a></li>
+                        <li class="admin-menu-item"><a href="@Url.Action("Index","Brand")">مدیریت برند</a></li>
+                        <li class="admin-menu-item"><a href="@Url.Action("Index","Device")">مدیریت دستگاه ها</a></li>
+                        <li class="admin-menu-item"><a href="@Url.Action("Index","PieceType")">مدیریت انواع قطعات</a></li>
+                        <li class="admin-menu-item"><a href="@Url.Action("Index","Piece", new {page = 1})">مدیریت قطعات</a></li>
+                        <li class="admin-menu-item"><a href="@Url.Action("Index","Message")">مدیریت پیام ها</a></li>
+                    </ul>
+                </aside>
+                <article class="col-xs-12 col-md-10">
+                    <div class="admin-content">
+                        @RenderBody()
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+    <!--footer-->
+    <div class="clearfix"></div>
+    <footer class="container-fluid footer-custom">
+        <div class="col-md-6">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 footer-title text-center">
+                <p><i class="fa fa-bar-chart" style="margin-left: 5px;"></i>آمار سایت</p>
+            </div>
+            <div class="clearfix"></div>
+            <ul style="margin-top:10px;">
+                <li class="footer-items">
+                    <i class="fa fa-users"></i>کاربران آنلاین:<span style="margin-right: 5px;">2523</span>
+                </li>
+                <li class="footer-items">
+                    <i class="fa fa-eye"></i>کل بازدیدها:<span style="margin-right: 5px;">623200</span>
+                </li>
+                <li class="footer-items">
+                    <i class="fa fa-file"></i>کل مطالب:<span style="margin-right: 5px;">3260</span>
+                </li>
+                <li class="footer-items">
+                    <i class="fa fa-comments-o"></i>کل نظرات:<span style="margin-right: 5px;">53263</span>
+                </li>
+                <li class="footer-items"><i class="fa fa-user"></i>کاربران:<span style="margin-right: 5px;">5236</span></li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 footer-title text-center">
+                <p><i class="fa fa-th-list" style="margin-left: 5px;"></i>بخش های سایت</p>
+            </div>
+            <div class="clearfix"></div>
+            <ul style="margin-top:10px;">
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>صفحه اصلی</a></li>
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>قطعات اصلی</a></li>
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>درباره ما</a></li>
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>تماس با ما</a></li>
+            </ul>
+        </div>
+    </footer>
+    <!--end of footer-->
+
+    @{
+    Html.RenderPartial("~/Views/Shared/Partial/_Boxes.cshtml");
+    }
+</body>
+</html>

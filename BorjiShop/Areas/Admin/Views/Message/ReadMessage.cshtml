@@ -1,0 +1,62 @@
+﻿@using BorjiShop.BLL
+@model BorjiShop.Models.Message
+
+@{
+    ViewBag.Title = "ReadMessage";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    int currentPage = ViewBag.CurrentPage;
+}
+
+@section panelName
+{خواندن و پاسخ دادن به پیام}
+
+<table class="message-table">
+    <tr>
+        <td>نام و نشان فرستنده: </td>
+        <td>
+            @Model.FullName
+        </td>
+    </tr>
+    <tr>
+        <td>پست الکترونیک فرستنده: </td>
+        <td>
+            <span id="txtEmail">@Model.Email</span>
+        </td>
+    </tr>
+    <tr>
+        <td>تاریخ دریافت پیام: </td>
+        <td>@PublicFunction.ConvertMiladiToShamsi(Model.Date)</td>
+    </tr>
+    <tr>
+        <td class="col-md-2">متن پیام: </td>
+        <td class="col-md-10">
+            <textarea class="form-control" rows="10" readonly>@Model.Text</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>پاسخ: </td>
+        <td>
+            @if (!Model.Answered)
+            {
+                <textarea id="txtAnswer" class="form-control" rows="10"></textarea>
+            }
+            else
+            {
+                <textarea id="txtAnswer" class="form-control" rows="10" readonly>@Model.Answer</textarea>
+            }
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            @if (!Model.Answered)
+            {
+                <button class="btn btn-success" onclick="reply(@Model.ID)">ارسال پاسخ</button>
+            }
+            <a role="button" class="btn btn-danger" href="@Url.Action("Index","Message",new {page = currentPage})">بازگشت</a>
+        </td>
+    </tr>
+</table>
+
+
+<script src="~/RequestScript/Message.js"></script>

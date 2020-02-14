@@ -1,0 +1,202 @@
+﻿@using BorjiShop.Controllers
+@using BorjiShop.Models
+
+@{
+    Layout = "../Shared/_MasterLayout.cshtml";
+    ViewBag.Title = "فروشگاه آنلاین قظعات موبایل برجی";
+    List<Device> Devices = ViewBag.Devices;
+    List<Brand> Brands = ViewBag.Brands;
+    List<HomeController.FinalPiece> Pieces = ViewBag.Pieces;
+    List<HomeController.FinalPiece> Slider = ViewBag.Slider;
+    int page = ViewBag.Page;
+    int lastPage = ViewBag.LastPage;
+    List<ShopCartItem> shopCart = new List<ShopCartItem>();
+    if (Session["ShoppingCart"] != null)
+    {
+        shopCart = Session["ShoppingCart"] as List<ShopCartItem>;
+    }
+}
+<sectio class="container">
+    <div class="row">
+        <!--sidebar-->
+        <aside class="col-xs-12 col-md-3">
+            <!--collapse tabs-->
+            <div class="bg-info-custom text-center">
+                <p class="info">تفکیک قطعات</p>
+            </div>
+            <div class="panel-group panel-group-custom" id="accordion">
+                @foreach (Brand brand in Brands)
+                {
+                    <div class="panel">
+                        <div class="panel-heading panel-heading-custom">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordin" href="#s@(brand.ID)">
+                                    @brand.PersianName
+                                    <i class="fa fa-plus pull-left fa-plus-custom"></i>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="s@(brand.ID)" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul style="padding: 0;">
+                                    @foreach (Device device in Devices)
+                                    {
+                                        if (device.BrandId == brand.ID)
+                                        {
+                                            <li class="panel-item"><a class="hvr-icon-back" href="@Url.Action("IndexByDeviceId", "Home", new {id = device.ID, page = 1})">@device.EnglishName</a></li>
+                                        }
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!--end of collapse tabs-->
+            <!--news letter-->
+            @*<div>
+                <div class="bg-info-custom text-center">
+                    <p class="info">خبرنامه</p>
+                </div>
+
+                <div class="thumbnail">
+                    <p class="text-center" style="color: #5C6250;">
+                        برای اطلاع از جدیدترین قطعات در خبرنامه ما عضو
+                        شوید
+                    </p>
+                    <div class="form-group input-group" style="margin-top: 10px;">
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                        <input type="email" class="form-control email-input" style="height: 50px;"
+                               placeholder="ایمیل خود را وارد نمایید" />
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-success">عضویت</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-info-custom text-center">
+                    <p class="info">در شبکه های اجتماعی ما را دنبال نمایید</p>
+                </div>
+                <div class="thumbnail">
+                    <ul class="list-inline text-center soctial-network" style="padding-top: 17px;">
+                        <li><a href="#"><img src="images/gplus.png" /></a></li>
+                            <li><a href="#"><img src="images/fb.png" /></a></li>
+                            <li><a href="#"><img src="images/Telegram.png" /></a></li>
+                            <li><a href="#"><img src="images/Instagram.png" /></a></li>
+                    </ul>
+                </div>
+            </div>*@
+            <!--end of news letter-->
+        </aside>
+        <!--end of sidebar-->
+        <!--content-->
+        <article class="col-xs-12 col-md-9">
+            <div id="sliderSection">
+                <div class="bg-info-custom text-center">
+                    <p class="info">قطعات ویژه</p>
+                </div>
+                <!--slider-->
+                <div class="callbacks_container">
+                    <ul class="rslides" id="slider">
+                        @foreach (HomeController.FinalPiece item in Slider)
+                        {
+                            <li>
+                                <a href="#">
+                                    <img src="~/PieceImage/@item.FileName" class="img-responsive img-slider-custom"
+                                         style="width: 880px; height: 300px;" alt="" />
+                                    <p class="caption">@item.PieceTypeName @item.BrandName @item.DeviceName</p>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <!--end of slider-->
+            </div>
+            <div class="bg-info-custom text-center">
+                <p class="info" id="mainCaption">قطعات جدید</p>
+            </div>
+            <div id="mainPiece">
+                @foreach (HomeController.FinalPiece item in Pieces)
+                {
+                    <div class="thumbnail col-xs-12 col-md-4">
+                        <a href="#">
+                            <img src="~/PieceImage/@item.FileName" class="img-responsive img-rounded img-custom hvr-grow" style="height: 225px;" />
+                            <p class="caption-custom">@item.PieceTypeName @item.BrandName @item.DeviceName</p>
+                        </a>
+                        <p class="price">@item.Price تومان</p>
+                        @*@if (!shopCart.Any(p => p.PieceId == @item.ID))
+                            {*@
+                        <div class="text-center">
+                            <a href="#" role="button" class="btn btn-success text-center" onclick="addToCart(@item.ID)">افزودن به سبد خرید</a>
+                        </div>
+                        @*}*@
+                    </div>
+                }
+            </div>
+            <div class="clearfix"></div>
+            <div class="text-center">
+                <nav aria-label="Page navigation">
+                    <ul id="pagination" class="pagination">
+                        @if (page != 1)
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Home", new {page = 1})" aria-label="Previous">
+                                    <span aria-hidden="true" style="color: #5C6250;">&lt;&lt;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Home", new {page = @page - 1})" aria-label="Previous">
+                                    <span aria-hidden="true" style="color: #5C6250;">&lt;</span>
+                                </a>
+                            </li>
+                        }
+                        @if (lastPage != 1)
+                        {
+                            <li><a style="color: #5C6250;">@page</a></li>
+                        }
+                        @if (page != lastPage)
+                        {
+                            <li>
+                                <a href="@Url.Action("Index", "Home", new {page = @page + 1})" aria-label="Next">
+                                    <span aria-hidden="true" style="color: #5C6250;">&gt;</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Home", new {page = @lastPage})" aria-label="Next">
+                                    <span aria-hidden="true" style="color: #5C6250;">&gt;&gt;</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </article>
+        <!--end of content-->
+    </div>
+</sectio>
+
+<script>
+    function addToCart(id) {
+        var brandId = $("#drpbrandId").val();
+        var parameters = {};
+        parameters["brandId"] = brandId;
+        parameters["pieceId"] = 0;
+
+        CallMethod("/Admin/Device/GetDeviceByBrandId",
+            JSON.stringify(parameters),
+            function (response) {
+                var deviceList = "<option value='0'>انتخاب دستگاه</option>";
+                if (response["Item1"].length > 0) {
+                    $.each(response["Item1"],
+                        function () {
+                            deviceList += "<option value='" + this["ID"] + "'>" + this["EnglishName"] + "</option>";
+                        });
+                };
+                $("#drpdeviceId").empty();
+                $("#drpdeviceId").html(
+                    $("#drpdeviceId").html() +
+                    deviceList
+                );
+            },
+            true);
+    }
+</script>

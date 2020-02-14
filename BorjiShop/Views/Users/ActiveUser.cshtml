@@ -1,0 +1,34 @@
+﻿@using BorjiShop.Models
+
+@{
+    Layout = null;
+    string status = ViewBag.Status;
+    User user = (User)ViewBag.User;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>فعال سازی حساب کاربری</title>
+    <link href="~/Content/Styles/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/Content/Styles/mainstyle.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="row col-md-6 col-xs-12 col-md-offset-3 text-center" style="margin-top: 50px;">
+        @if (status == "Success")
+        {
+            <div class="alert alert-success">
+                <br /> @user.FirstName @user.LastName عزیز حساب کاربری شما فعال گردید. در صورت تمایل با استفاده از دکمه زیر می توانید وارد سایت شوید.<br /><br/>
+                <a href="/" class="btn btn-success">ورود به سایت</a><br/>
+            </div>
+
+        }
+        else
+        {
+            <div class="alert alert-danger"><br />حساب کاربری یافت نشد.<br /><br/></div>
+        }
+    </div>
+</body>
+</html>

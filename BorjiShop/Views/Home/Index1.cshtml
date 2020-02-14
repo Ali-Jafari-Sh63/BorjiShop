@@ -1,0 +1,368 @@
+﻿@using BorjiShop.Controllers
+@using BorjiShop.Controllers
+@using BorjiShop.Models
+@{
+    List<Brand> Brands = ViewBag.Brands;
+    List<HomeController.FinalPiece> Slider = ViewBag.Slider;
+    List<HomeController.FinalPiece> Pieces = ViewBag.Pieces;
+    List<Device> Devices = ViewBag.Devices;
+    List<Piecetype> Piecetypes = ViewBag.PieceType;
+    int page = ViewBag.Page;
+    int lastPage = ViewBag.LastPage;
+}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<meta charset="utf-8" />
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fa">
+<head>
+    <title>فروشگاه آنلاین برجی</title>
+    <!--styles-->
+    <link rel="icon" type="image/png" href="/Content/Images/Main-Picture/favicon.png" />
+    <link rel="stylesheet" href="/Content/Styles/bootstrap.rtl.css" />
+    <link rel="stylesheet" href="/Content/Styles/animate.min.css" />
+    <link rel="stylesheet" href="/Content/Styles/bootstrap-dropdownhover.min.css" />
+    <link rel="stylesheet" href="/Content/Styles/hover.css" />
+    <link rel="stylesheet" href="/Content/Styles/font-awesome.css" />
+    <link rel="stylesheet" href="/Content/Styles/mainstyle.css" />
+    <!--end of styles-->
+</head>
+<body>
+    <!--menu-->
+    <nav class="navbar navbar-custom">
+        <div class="container-fluid main-menu-container">
+            <!--logo-->
+            <div class="navbar-brand pull-right navbar-brand-custom">
+                <a href="#">
+                    <img src="/Content/Images/Main-Picture/logo.png" class="img-responsive" />
+                </a>
+            </div>
+            <!--end of logo-->
+            <div class="navbar-header navbar-header-custom pull-left">
+                <button type="button" class="navbar-toggle navbar-toggle-custom" data-toggle="collapse" data-target="#menu">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-header pull-left navbar-header-left">
+                @if (Session["User"] == null)
+                {
+                    <a href="#" data-toggle="modal" data-target="#login-modal">ورود / عضویت</a>
+                }
+                else
+                {
+                    User user = (User)Session["User"];
+                    <ul class="nav navbar-nav navbar-nav-custom">
+                        <li class="dropdown" style="margin-top: -14px;">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                &nbsp;@user.FirstName @user.LastName&nbsp;<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu sub-menu">
+                                <li value=""><a href="@Url.Action("UserProfile","Users",new {id=user.ID})"><span style="font-size: 16px;"><i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;</span>پروفایل</a></li>
+                                <li><a href="#" onclick="logOut();"><span style="font-size: 16px;"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;&nbsp;</span>خروج از حساب کاربری</a></li>
+                            </ul>
+                        </li>
+                        <li><span>|</span></li>
+                        <li style="margin-top: -14px;"><a href="#"><span style="font-size: 20px;"><i class="fa fa-shopping-cart"></i></span></a></li>
+                    </ul>
+                }
+            </div>
+            <div class="collapse navbar-collapse navbar-collapse-custom" id="menu" data-hover="dropdown"
+                 data-animations="zoomIn zoomIn zoomIn zoomIn">
+                <ul class="nav navbar-nav navbar-nav-custom">
+                    <li><a class="hvr-underline-from-center" href="#">صفحه اصلی</a></li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle hvr-underline-from-center" data-toggle="dropdown" href="#">
+                            قطعات اصلی<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu sub-menu">
+                            @foreach (Brand item in Brands)
+                            {
+                                <li value="@item.ID"><a href="#">@item.PersianName</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li><a class="hvr-underline-from-center" href="#">درباره ما</a></li>
+                    <li><a class="hvr-underline-from-center" href="#">تماس با ما</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!--end of menu-->
+    <div class="main">
+        <!--header-->
+        <header class="img-responsive">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="logo">
+                        <div class="text-center">
+                            <h2>مرکز تخصصی فروش قطعات تلفن همراه</h2>
+                        </div>
+                        <br />
+                        <div class="text-center">
+                            <h3>چه قطعه ای می خواهید؟</h3>
+                        </div>
+                    </div>
+                    <div class="form-group input-group search-div">
+                        <select name="drppieceTypeId" id="drppieceTypeId" class="custom-select">
+                            <option value="0">انتخاب نوع قطعه</option>
+                            @foreach (var item in Piecetypes)
+                            {
+                                <option value="@item.ID">@item.PersianName</option>
+                            }
+                        </select>
+                        <select name="drpbrandId" id="drpbrandId" class="custom-select" onchange="getDeviceByBrandId()">
+                            <option value="0">انتخاب برند</option>
+                            @foreach (var item in Brands)
+                            {
+                                <option value="@item.ID">@item.PersianName</option>
+                            }
+                        </select>
+                        <select name="drpdeviceId" id="drpdeviceId" class="custom-select">
+                            <option value="0">انتخاب دستگاه</option>
+                        </select>
+                        <button class="btn btn-success" style="margin-right: 3px;" onclick="searchPiece(1)">جستجوی قطعه</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!--end of header-->
+        <!--main content-->
+        <sectio class="container">
+            <div class="row">
+                <!--sidebar-->
+                <aside class="col-xs-12 col-md-3">
+                    <!--collapse tabs-->
+                    <div class="bg-info-custom text-center">
+                        <p class="info">تفکیک قطعات</p>
+                    </div>
+                    <div class="panel-group panel-group-custom" id="accordion">
+                        @foreach (Brand brand in Brands)
+                        {
+                            <div class="panel">
+                                <div class="panel-heading panel-heading-custom">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordin" href="#s@(brand.ID)">
+                                            @brand.PersianName
+                                            <i class="fa fa-plus pull-left fa-plus-custom"></i>
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="s@(brand.ID)" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul style="padding: 0;">
+                                            @foreach (Device device in Devices)
+                                            {
+                                                if (device.BrandId == brand.ID)
+                                                {
+                                                    <li class="panel-item"><a class="hvr-icon-back" href="#">@device.EnglishName</a></li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <!--end of collapse tabs-->
+                    <!--news letter-->
+                    <div class="bg-info-custom text-center">
+                        <p class="info">خبرنامه</p>
+                    </div>
+                    <div>
+                        <div class="thumbnail">
+                            <p class="text-center" style="color: #5C6250;">
+                                برای اطلاع از جدیدترین قطعات در خبرنامه ما عضو
+                                شوید
+                            </p>
+                            <div class="form-group input-group" style="margin-top: 10px;">
+                                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                <input type="email" class="form-control email-input" style="height: 50px;"
+                                       placeholder="ایمیل خود را وارد نمایید" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-success">عضویت</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-info-custom text-center">
+                            <p class="info">در شبکه های اجتماعی ما را دنبال نمایید</p>
+                        </div>
+                        <div class="thumbnail">
+                            <ul class="list-inline text-center soctial-network" style="padding-top: 17px;">
+                                @*<li><a href="#"><img src="images/gplus.png" /></a></li>
+                                    <li><a href="#"><img src="images/fb.png" /></a></li>
+                                    <li><a href="#"><img src="images/Telegram.png" /></a></li>
+                                    <li><a href="#"><img src="images/Instagram.png" /></a></li>*@
+                            </ul>
+                        </div>
+                    </div>
+                    <!--end of news letter-->
+                </aside>
+                <!--end of sidebar-->
+                <!--content-->
+                <article class="col-xs-12 col-md-9">
+                    <div class="bg-info-custom text-center">
+                        <p class="info">قطعات ویژه</p>
+                    </div>
+                    <!--slider-->
+                    <div class="callbacks_container">
+                        <ul class="rslides" id="slider">
+                            @foreach (HomeController.FinalPiece item in Slider)
+                            {
+                                <li>
+                                    <a href="#">
+                                        <img src="~/PieceImage/@item.FileName" class="img-responsive img-slider-custom"
+                                             style="width: 880px; height: 300px;" alt="" />
+                                        <p class="caption">@item.PieceTypeName @item.BrandName @item.DeviceName</p>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <!--end of slider-->
+                    <div class="bg-info-custom text-center">
+                        <p class="info" id="mainCaption">قطعات جدید</p>
+                    </div>
+                    <div id="mainPiece">
+                        @foreach (HomeController.FinalPiece item in Pieces)
+                        {
+                            <div class="thumbnail col-xs-12 col-md-4">
+                                <a href="#">
+                                    <img src="~/PieceImage/@item.FileName" class="img-responsive img-rounded img-custom hvr-grow" style="height: 225px;" />
+                                    <p class="caption-custom">@item.PieceTypeName @item.BrandName @item.DeviceName</p>
+                                </a>
+                                <p class="price">@item.Price تومان</p>
+                            </div>
+                        }
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="text-center">
+                        <nav aria-label="Page navigation">
+                            <ul id="pagination" class="pagination">
+                                @if (page != 1)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index", "Home", new {page = 1})" aria-label="Previous">
+                                            <span aria-hidden="true" style="color: #5C6250;">&lt;&lt;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Home", new {page = @page - 1})" aria-label="Previous">
+                                            <span aria-hidden="true" style="color: #5C6250;">&lt;</span>
+                                        </a>
+                                    </li>
+                                }
+                                @if (lastPage != 1)
+                                {
+                                    <li><a style="color: #5C6250;">@page</a></li>
+                                }
+                                @if (page != lastPage)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index", "Home", new {page = @page + 1})" aria-label="Next">
+                                            <span aria-hidden="true" style="color: #5C6250;">&gt;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "Home", new {page = @lastPage})" aria-label="Next">
+                                            <span aria-hidden="true" style="color: #5C6250;">&gt;&gt;</span>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </nav>
+                    </div>
+                </article>
+                <!--end of content-->
+            </div>
+        </sectio>
+        <!--end of main content-->
+    </div>
+    <!--footer-->
+    <footer class="container-fluid footer-custom">
+        <div class="col-md-6">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 footer-title text-center">
+                <p><i class="fa fa-bar-chart" style="margin-left: 5px;"></i>آمار سایت</p>
+            </div>
+            <div class="clearfix"></div>
+            <ul style="margin-top: 10px;">
+                <li class="footer-items">
+                    <i class="fa fa-users"></i>کاربران آنلاین:<span style="margin-right: 5px;">2523</span>
+                </li>
+                <li class="footer-items">
+                    <i class="fa fa-eye"></i>کل بازدیدها:<span style="margin-right: 5px;">623200</span>
+                </li>
+                <li class="footer-items">
+                    <i class="fa fa-file"></i>کل مطالب:<span style="margin-right: 5px;">3260</span>
+                </li>
+                <li class="footer-items">
+                    <i class="fa fa-comments-o"></i>کل نظرات:<span style="margin-right: 5px;">53263</span>
+                </li>
+                <li class="footer-items"><i class="fa fa-user"></i>کاربران:<span style="margin-right: 5px;">5236</span></li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <div class="col-sm-12 col-md-6 col-md-offset-3 footer-title text-center">
+                <p><i class="fa fa-th-list" style="margin-left: 5px;"></i>بخش های سایت</p>
+            </div>
+            <div class="clearfix"></div>
+            <ul style="margin-top: 10px;">
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>صفحه اصلی</a></li>
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>قطعات اصلی</a></li>
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>درباره ما</a></li>
+                <li class="footer-items"><a href="#"><i class="fa fa-dot-circle-o"></i>تماس با ما</a></li>
+            </ul>
+        </div>
+    </footer>
+    <!--end of footer-->
+    <!--login modal-->
+    @*<div class="modal fade" id="login-modal">
+            <div class="modal-dialog">
+                <!--modal content-->
+                <div class="modal-content">
+                    <div class="modal-header modal-header-custom text-center">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">ورود</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group input-group" style="margin-top: 10px;">
+                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <input id="txtEmail" type="text" class="form-control" placeholder="پست الکترونیک" />
+                        </div>
+                        <div class="form-group input-group">
+                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                            <input id="txtPassword" type="password" class="form-control" placeholder="رمز عبور" />
+                        </div>
+                        <button class="btn btn-success center-block" type="button" onclick="login();">ورود به فروشگاه</button>
+                        <br />
+                        <div class="registeration text-center">
+                            کاربر جدید هستید؟<a href="#"><span>ثبت نام کنید</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Login.cshtml");
+    }
+
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Boxes.cshtml");
+    }
+
+    <!--end login modal-->
+    <!--scripts-->
+    <script src="~/scripts/jquery.min.1.11.2.js"></script>
+    <script src="~/scripts/bootstrap.js"></script>
+    <script src="~/scripts/bootstrap-dropdownhover.min.js"></script>
+    <script src="~/scripts/responsiveslides.min.js"></script>
+    <script src="~/RequestScript/Home.js"></script>
+    <script src="~/scripts/mainscript.js"></script>
+    <script>
+        $(document).ready(function () {
+            hideLoader();
+        });
+    </script>
+    <!--end of scripts-->
+</body>
+</html>

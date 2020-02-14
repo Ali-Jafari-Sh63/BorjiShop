@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "مدیریت قطعات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section panelName
+{مدیریت قطعات}
+
+<input id="page" type="hidden" value="@(ViewBag.Page)"/>
+
+<table class="table">
+    <thead id="tableHead">
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+<table class="table" id="hiddenElement" class="hidden-element" style="width: 98% !important;">
+    <thead id="emptyTableHead">
+    </thead>
+    <tbody id="emptyTableBody"></tbody>
+</table>
+<div class="text-center">
+    <nav aria-label="Page navigation">
+        <ul id="pagination" class="pagination"></ul>
+    </nav>
+</div>
+<div id="divBtn" class="text-center">
+    <a href="@Url.Action("Modify","Piece", new {type = 0, ID= 0})" id="btnInsert" type="button" class="btn btn-success btn-insert" style="height: 50px; padding-top: 13px;">افزودن قطعه جدید</a>
+</div>
+<span id="lastPage" hidden></span>
+<span id="deviceId" hidden></span>
+
+
+<script>
+    $(document).ready(function () {
+        var page = $("#page").val();
+        getPiece(page);
+    });
+</script>
+<script src="~/RequestScript/Piece.js"></script>

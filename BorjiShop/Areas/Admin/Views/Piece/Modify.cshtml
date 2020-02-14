@@ -1,0 +1,164 @@
+﻿@using BorjiShop.Models;
+
+@{
+    ViewBag.Title = "مدیریت قطعات";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    List<Piecetype> PieceTypes = ViewBag.PieceTypes;
+    List<Brand> Brands = ViewBag.Brands;
+    List<Device> Devices = ViewBag.Devices;
+    Piece piece = new Piece();
+    string keys = "";
+    if (ViewBag.Type == 1)
+    {
+        piece = ViewBag.Piece;
+        keys = ViewBag.Keys;
+
+    }
+}
+
+@section panelName
+{مدیریت قطعات}
+
+<input id="actionMode" type="hidden" value="@(ViewBag.Type)" />
+<input id="elementId" type="hidden" value="@(ViewBag.Id)" />
+@if (ViewBag.Page != null)
+{
+    <input id="page" type="hidden" value="@(ViewBag.Page)" />
+}
+
+
+<table class="modify-table">
+    <tr>
+        <td>نوع قطعه</td>
+        <td>
+            @if (ViewBag.Type == 1)
+            {
+                <select id="pieceTypeSelect" name="pieceTypeSelect" class="form-control no-top-padding">
+                    @foreach (var item in PieceTypes)
+                    {
+                        if (piece.PieceTypeId == item.ID)
+                        {
+                            <option value="@item.ID" selected>@item.PersianName</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.PersianName</option>
+                        }
+                    }
+                </select>
+            }
+            else
+            {
+                <select id="pieceTypeSelect" name="pieceTypeSelect" class="form-control no-top-padding">
+                    @foreach (var item in PieceTypes)
+                    {
+                        <option value="@item.ID">@item.PersianName</option>
+                    }
+                </select>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>برند</td>
+        <td>
+            @if (ViewBag.Type == 1)
+            {
+                <select id="brandSelect" name="brandSelect" class="form-control no-top-padding" onchange="getDeviceByBrandId()">
+                    @foreach (var item in Brands)
+                    {
+                        if (piece.BrandId == item.ID)
+                        {
+                            <option value="@item.ID" selected="">@item.PersianName</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.PersianName</option>
+                        }
+                    }
+                </select>
+            }
+            else
+            {
+                <select id="brandSelect" name="brandSelect" class="form-control no-top-padding" onchange="getDeviceByBrandId()">
+                    @foreach (var item in Brands)
+                    {
+                        <option value="@item.ID">@item.PersianName</option>
+                    }
+                </select>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>دستگاه</td>
+        <td id="device"></td>
+    </tr>
+    <tr>
+        <td>قیمت</td>
+        <td>
+            @if (ViewBag.Type == 1)
+            {
+                <input id="txtPrice" type="number" class="form-control" value="@piece.Price" />
+            }
+            else
+            {
+                <input id="txtPrice" type="number" class="form-control" />
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>قطعه ویژه</td>
+        <td>
+            @if (ViewBag.Type == 1)
+            {
+                <input id="chkIsSlider" type="checkbox" checked="@piece.IsSlider" />
+            }
+            else
+            {
+                <input id="chkIsSlider" type="checkbox" />
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>کلمات کلیدی</td>
+        <td>
+            @if (ViewBag.Type == 1)
+            {
+                <input id="txtKeys" type="text" value="@keys" class="form-control"/>
+            }
+            else
+            {
+                <input id="txtKeys" type="text" class="form-control"/>
+            }
+        </td>
+    </tr>
+    <tr>
+        <td>تصویر</td>
+        <td>
+            @if (ViewBag.Type == 1)
+            {
+                <img src="~/PieceImage/@piece.FileName" class="img-custom" />
+            }
+            <input type="file" id="uploadPic" name="uploadPic" />
+        </td>
+    </tr>
+</table>
+<div id="divBtn" class="text-center">
+    @if (ViewBag.Type == 0)
+    {
+        <button id="btnInsert" type="button" class="btn btn-success btn-insert" onclick='addPiece()'>ثبت قطعه جدید</button>
+    }
+    @if (ViewBag.Type == 1)
+    {
+        <button id="btnInsert" type="button" class="btn btn-success btn-insert" onclick='updatePiece()'>ویرایش قطعه</button>
+    }
+</div>
+
+
+
+
+<script src="~/RequestScript/Piece.js"></script>
+<script>
+    $(document).ready(function () {
+        getDeviceByBrandId();
+    });
+</script>

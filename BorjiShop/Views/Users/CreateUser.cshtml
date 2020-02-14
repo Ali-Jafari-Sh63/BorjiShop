@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="~/Content/Images/Main-Picture/favicon.png" />
+    <link href="~/Content/Styles/bootstrap.rtl.css" rel="stylesheet" />
+    <link href="~/Content/Styles/font-awesome.css" rel="stylesheet" />
+    <link href="~/Content/Styles/mainstyle.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row text-center">
+            <div class="panel panel-primary col-md-6 col-xs-12 col-md-offset-3 loginForm" style="margin-top: 5%;">
+                <div class="panel-heading loginForm-heading">ثبت نام در فروشگاه اینترنتی قطعات موبایل برجی</div>
+                <div class="panel-body">
+                    <table class="modify-table" style="width: 90%;">
+                        <tr>
+                            <td>نام</td>
+                            <td><input id="txtFirstName" type="text" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td>نام خانوادگی</td>
+                            <td><input id="txtLastName" type="text" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td>پست الکترونیک</td>
+                            <td><input id="txtEmail" type="text" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td>شماره موبایل</td>
+                            <td><input id="txtPhone" type="number" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td>رمز عبور</td>
+                            <td><input id="txtPassword" type="password" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td>تکرار رمز عبور</td>
+                            <td><input id="txtConfirmPassword" type="password" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <td>آدرس</td>
+                            <td><textarea id="txtAddress" type="password" class="form-control" rows="4"></textarea></td>
+                        </tr>
+                    </table>
+                    <button class="btn btn-success center-block" type="button" onclick="craeteUser()">ثبت نام</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Boxes.cshtml");
+    }
+</body>
+</html>
+@*<script>*@
+<script src="~/Scripts/jquery.min.1.11.2.js"></script>
+<script src="~/Scripts/mainscript.js"></script>
+<script src="~/RequestScript/Users.js"></script>
+<script>
+    hideLoader();
+</script>
+@*</script>*@

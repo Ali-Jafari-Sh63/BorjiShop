@@ -1,0 +1,199 @@
+﻿@model IEnumerable<BorjiShop.Models.ShowShoppingCart>
+@using BorjiShop.Models
+@{
+    Layout = null;
+    User currentUser = ViewBag.CurrentUser;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>فروشگاه برجی::سبد خرید</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Styles/mainstyle.css" rel="stylesheet" />
+    <style>
+        .tbl-caption {
+            padding-bottom: 10px;
+            padding-top: 10px;
+            background-color: blueviolet;
+            color: white;
+        }
+
+        .top-padding {
+            padding-top: 20px !important;
+        }
+
+        .btn-buy {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        #table tr td {
+            background-color: #ecf0f1;
+        }
+    </style>
+</head>
+<body>
+    @if (!Model.Any())
+    {
+        <div class="col-md-4 col-md-offset-4 text-center text-danger" style="direction: rtl; margin-top: 180px;">
+            سبد خرید شما خالی است.<br /><br />
+            <input type="button" class="btn btn-primary" onclick="history.back();" value="بازگشت" />
+        </div>
+    }
+    else
+    {
+        User user = (User)Session["User"];
+
+        <div class="col-md-6 col-md-offset-3" style="margin-top: 80px; background-color: #ecf0f1;">
+            <br />
+            <table class="table" style="direction: rtl;">
+                <caption class="tbl-caption">سبد خرید شما</caption>
+                <tr>
+                    <th>تصویر</th>
+                    <th>
+                        نوع قطعه
+                    </th>
+                    <th>
+                        برند
+                    </th>
+                    <th>
+                        نام دستگاه
+                    </th>
+                    <th>
+                        قیمت
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/PieceImage/@item.FileName" class="img-responsive img-rounded img-custom hvr-grow" style="height: 100px; width: 100px;" />
+                        </td>
+                        <td class="top-padding">
+                            @Html.DisplayFor(modelItem => item.TypeName)
+                        </td>
+                        <td class="top-padding">
+                            @Html.DisplayFor(modelItem => item.BrandName)
+                        </td>
+                        <td class="top-padding">
+                            @Html.DisplayFor(modelItem => item.DeviceName)
+                        </td>
+                        <td class="top-padding">
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td class="top-padding">
+                            <a href="@Url.Action("Remove", "ShoppingCart", new {id = item.PieceId})"><span class="btn  btn-xs btn-danger">حذف</span></a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="4">جمع کل</td>
+                    <td>
+                        @Model.Sum(s => s.Price)
+                    </td>
+                    <td></td>
+                </tr>
+
+            </table>
+            <div class="col-md-10 col-md-offset-1 text-right top-padding">
+                <div class="col-md-12">
+                    @using (Html.BeginForm("UpdateAddress", "Users", FormMethod.Post))
+                    {
+                        <table id="table" style="width: 100%;">
+                            
+                            <tr>
+                                <td colspan="4">خرید شما بعد از تایید و پرداخت به آدرس زیر ارسال می گردد</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="text-left"><a style="cursor: pointer" role="button" onclick="showAddress()">تغییر آدرس</a></td>
+                                <td colspan="3" class="text-right">آدرس: @currentUser.Address</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left col-md-3"></td>
+                                <td colspan="3" class="text-right col-md-9">کدپستی: @currentUser.PostalCode</td>
+                            </tr>
+                            <tr class="hidden-element trAddress">
+                                <td colspan="3" class="text-left"><textarea name="newAddress" id="txtNewAddress" rows="4" class="form-control"></textarea></td>
+                                <td class="text-right">آدرس جدید</td>
+                            </tr>
+                            <tr class="hidden-element trAddress">
+                                <td colspan="3" class="text-left"><input name="newPostal" id="txtNewPostalCode" type="text" class="form-control"/></td>
+                                <td class="text-right">کدپستی جدید</td>
+                            </tr>
+                            <tr class="hidden-element trAddress">
+                                <td colspan="3" class="text-left" style="margin-top: 0;">
+
+                                    <button class="btn btn-danger">لغو</button>
+                                    <button type="submit" class="btn btn-primary">تایید</button>
+
+                                </td>
+                                <td class="text-left">@*<input id="userId" type="hidden" value="@user.ID"/>*@</td>
+                            </tr>
+
+                        </table>
+                    }
+                </div>
+            </div>
+            <div class="col-md-2 col-md-offset-5">
+                <a role="button" href="@Url.Action("PayOff", "ShoppingCart" , new {price = Model.Sum(s => s.Price)})" class="btn btn-success btn-buy">تایید و پرداخت</a>
+            </div>
+        </div>
+    }
+
+</body>
+</html>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/mainscript.js"></script>
+<script>
+    function showAddress() {
+        $('.trAddress').removeClass("hidden-element");
+    }
+
+    function hideAddress() {
+        $('.trAddress').addClass("hidden-element");
+    }
+
+    //function updateAddress() {
+    //    var parameters = {};
+    //    var newAddress = $('#txtNewAddress').val();
+    //    var newPostal = $('#txtNewPostalCode').val();
+    //    //var userId = $('#userId').val();
+
+    //    parameters["newAddress"] = newAddress;
+    //    parameters["newPostal"] = newPostal;
+    //    //parameters["userId"] = userId;
+
+    //    CallMethod("/Admin/Device/AddDevice", JSON.stringify(parameters), function (response) {
+    //        if (response["Item1"] == "Success") {
+    //            LiteBoxShown("موفقیت", "برند با موفقیت ثبت شد.", "#A2DED0", true);
+    //            $("#LiteBoxButtom").click(function () {
+    //                closeErrorMessage();
+    //                hideElement();
+    //                getDevice(response["Item2"], 0);
+    //            });
+    //        } else if (response["Item1"] == "Error") {
+    //            LiteBoxShown("خطا", "خطا در ثبت برند.", "#F1A9A0", true);
+    //            $("#LiteBoxButtom").click(function () {
+    //                closeErrorMessage();
+    //            });
+    //        } else {
+    //            LiteBoxShown("خطا", response["Item1"], "#F1A9A0", true);
+    //            $("#LiteBoxButtom").click(function () {
+    //                closeErrorMessage();
+    //            });
+    //        }
+    //    }, true);
+    //}
+</script>

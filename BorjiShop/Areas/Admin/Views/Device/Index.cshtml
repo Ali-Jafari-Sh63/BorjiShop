@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "مدیریت دستگاه";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section panelName
+{مدیریت دستگاه ها}
+
+<table class="table">
+    <thead id="tableHead">
+    </thead>
+    <tbody id="tableBody"></tbody>
+</table>
+<table class="table hidden-element" id="hiddenElement">
+    <thead id="emptyTableHead">
+    </thead>
+    <tbody id="emptyTableBody">
+    </tbody>
+</table>
+<div class="text-center">
+    <nav aria-label="Page navigation">
+        <ul id="pagination" class="pagination"></ul>
+    </nav>
+</div>
+<div id="divBtn" class="text-center"></div>
+<span id="lastPage" hidden></span>
+<span id="deviceId" hidden></span>
+
+<script src="~/RequestScript/Device.js"></script>

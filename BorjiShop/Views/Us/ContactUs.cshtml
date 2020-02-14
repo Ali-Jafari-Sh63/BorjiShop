@@ -1,0 +1,242 @@
+﻿@using BorjiShop.DAL
+@using BorjiShop.Models
+@{
+    List<Brand> Brands = new DAL_Brand().GetAllBrand();
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>فروشگاه برجی::تماس با ما</title>
+    <link rel="icon" type="image/png" href="/Content/Images/Main-Picture/favicon.png" />
+    <link rel="stylesheet" href="/Content/Styles/bootstrap.rtl.css" />
+    <link rel="stylesheet" href="/Content/Styles/animate.min.css" />
+    <link rel="stylesheet" href="/Content/Styles/bootstrap-dropdownhover.min.css" />
+    <link rel="stylesheet" href="/Content/Styles/hover.css" />
+    <link rel="stylesheet" href="/Content/Styles/font-awesome.css" />
+    <link rel="stylesheet" href="/Content/Styles/mainstyle.css" />
+    <style>
+        body {
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .usHeader {
+            background-color: #28BD55;
+            color: #000;
+            padding-right: 0 !important;
+        }
+
+        .usContent {
+            margin-right: 0 !important;
+            padding-right: 0;
+        }
+
+            .usContent input {
+                margin-bottom: 10px;
+            }
+
+        .address {
+            margin-right: 0 !important;
+            background-color: transparent;
+        }
+
+        .addressItem {
+            margin-top: 14px;
+        }
+
+        .addressIcon {
+            text-align: center;
+        }
+
+        .addressContent {
+            padding-right: 15px;
+        }
+
+        table tr td {
+            background-color: transparent;
+            text-align: right;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+    </style>
+    @{
+        string email = "";
+        string fullName = "";
+        if (ViewBag.Email != null)
+        {
+            email = ViewBag.Email;
+            fullName = ViewBag.Name;
+        }
+    }
+</head>
+<body>
+    @*<div class="row usHeader text-center">
+            <br />
+            <h2><a style="color: #000;" href="/">فروشگاه آنلاین قطعات موبایل برجی</a></h2>
+            <br />
+        </div>*@
+    <nav class="navbar navbar-custom">
+        <div class="container-fluid main-menu-container">
+            <!--logo-->
+            <div class="navbar-brand pull-right navbar-brand-custom">
+                <a href="/">
+                    <img src="/Content/Images/Main-Picture/logo.png" class="img-responsive" />
+                </a>
+            </div>
+            <!--end of logo-->
+            <div class="navbar-header navbar-header-custom pull-left">
+                <button type="button" class="navbar-toggle navbar-toggle-custom" data-toggle="collapse" data-target="#menu">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-header pull-left navbar-header-left">
+                @if (Session["User"] == null)
+                {
+                    <a href="#" data-toggle="modal" data-target="#login-modal">ورود / عضویت</a>
+                }
+                else
+                {
+                    User user = (User)Session["User"];
+                    <ul class="nav navbar-nav navbar-nav-custom">
+                        <li class="dropdown" style="margin-top: -14px;">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                &nbsp;@user.FirstName @user.LastName&nbsp;<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu sub-menu">
+                                <li value=""><a href="@Url.Action("UserProfile","Users",new {id=user.ID})"><span style="font-size: 16px;"><i class="fa fa-user"></i>&nbsp;&nbsp;&nbsp;</span>پروفایل</a></li>
+                                <li><a href="#" onclick="logOut();"><span style="font-size: 16px;"><i class="fa fa-sign-out"></i>&nbsp;&nbsp;&nbsp;</span>خروج از حساب کاربری</a></li>
+                            </ul>
+                        </li>
+                        <li><span>|</span></li>
+                        <li style="margin-top: -14px;"><a href="@Url.Action("Index","ShoppingCart")"><span style="font-size: 20px; color: #0842EC;"><i class="fa fa-shopping-cart"></i><div style="font-size: 10px;" class="pull-left" id="countShopCart"></div></span></a></li>
+                    </ul>
+                }
+            </div>
+            <div class="collapse navbar-collapse navbar-collapse-custom" id="menu" data-hover="dropdown"
+                 data-animations="zoomIn zoomIn zoomIn zoomIn">
+                <ul class="nav navbar-nav navbar-nav-custom">
+                    <li><a class="hvr-underline-from-center" href="/">صفحه اصلی</a></li>
+                    @*<li class="dropdown">
+                            <a class="dropdown-toggle hvr-underline-from-center" data-toggle="dropdown" href="#">
+                                قطعات اصلی<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu sub-menu">
+                                @foreach (Brand item in Brands)
+                                {
+                                    <li value="@item.ID"><a style="cursor: pointer;" onclick="searchPieceByBrand(@item.ID,1)">@item.PersianName</a></li>
+                                }
+                            </ul>
+                        </li>*@
+                    <li><a class="hvr-underline-from-center" href="@Url.Action("AboutUs","Us")">درباره ما</a></li>
+                    <li><a class="hvr-underline-from-center" href="@Url.Action("ContactUs","Us")">تماس با ما</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="col-md-12 usContent">
+        <div class="col-md-6 text-center address"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3240.551948444457!2d51.02199978474099!3d35.68803288019271!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8ded2df2dd7a9f%3A0xb8101feacd928aea!2z2YXZiNio2KfbjNmEINin2YXbjNix!5e0!3m2!1sfa!2sus!4v1564411751744!5m2!1sfa!2sus" frameborder="0" style="border: 0; width: 100%; min-height: 550px;" allowfullscreen></iframe></div>
+        <div class="col-md-6 pull-right address">
+            <table>
+                <tr>
+                    <td class="addressIcon"><i class="fa fa-map-marker fa-2x" aria-hidden="true"></i></td>
+                    <td class="addressContent">استان تهران، شهر جدید اندیشه، ورودی فاز 1، مجتمع تجاری ارم، طبقه زیر همکف، پلاک 12، موبایل امیر</td>
+                </tr>
+                <tr>
+                    <td class="addressIcon"><i class="fa fa-envelope fa-2x" aria-hidden="true"></i></td>
+                    <td class="addressContent">BorjiShop@gmail.com</td>
+                </tr>
+                <tr>
+                    <td class="addressIcon"><i class="fa fa-phone fa-2x" aria-hidden="true"></i></td>
+                    <td class="addressContent"> 021-65513055<br />09339990105</td>
+                </tr>
+                <tr>
+                    <td class="addressIcon"><i class="fa fa-globe fa-2x" aria-hidden="true"></i></td>
+                    <td class="addressContent">www.borjishop.ir</td>
+                </tr>
+            </table>
+            <div class="clearfix"></div>
+            <div class="usContent text-center">
+                <h3 style="margin-bottom: 20px;">با استفاده از فرم زیر با ما در ارتباط باشید</h3>
+                <input id="name" class="form-control" type="text" placeholder="نام و نام خانوادگی" value="@fullName" />
+                <input id="email" class="form-control" type="text" placeholder="پست الکترونیک" value="@email" />
+                <textarea id="text" class="form-control" rows="6" placeholder="پیام شما"></textarea>
+                <input style="margin-top: 10px; color: #000;" type="button" role="button" class="btn btn-success" value="ارسال پیام" onclick="sendMessage()" />
+            </div>
+        </div>
+    </div>
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Boxes.cshtml");
+    }
+    @{
+        Html.RenderPartial("~/Views/Shared/Partial/_Login.cshtml");
+    }
+</body>
+</html>
+<script src="~/scripts/jquery.min.1.11.2.js"></script>
+<script src="~/scripts/bootstrap.js"></script>
+<script src="~/scripts/bootstrap-dropdownhover.min.js"></script>
+<script src="~/scripts/responsiveslides.min.js"></script>
+<script src="~/scripts/mainscript.js"></script>
+<script src="~/RequestScript/MasterLayout.js"></script>
+<script src="~/RequestScript/Home.js"></script>
+<script>
+    $(document).ready(function () {
+        hideLoader();
+    });
+    function sendMessage() {
+        var error = "";
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var text = $("#text").val();
+
+        //if (email === "") {
+        //    error += "لطفا پست الکترونیک خود را وارد نمایید.</ br>";
+        //    error = error + "</br>";
+        //}
+        if (checkEmail(email) === false) {
+            error += "لطفاً پست الکترونیک معتبر وارد نمایید.";
+            error = error + "</br>";
+        }
+        if (text === "") {
+            error += "لطفا پیام خود را وارد نمایید.";
+            error = error + "</br>";
+        }
+        if (error !== "") {
+            LiteBoxShown("خطا", error, "#F1A9A0", true);
+            $("#LiteBoxButtom").click(function () {
+                closeErrorMessage();
+            });
+            return;
+        }
+
+        var parameters = {};
+        var message = {};
+        message["FullName"] = name;
+        message["Email"] = email;
+        message["Text"] = text;
+        parameters["message"] = message;
+
+        CallMethod("/Us/AddMessage", JSON.stringify(parameters), function (response) {
+            if (response === "Success") {
+                LiteBoxShown("موفقیت", "پیام شما با موفقیت ثبت شد.", "#A2DED0", true);
+                $("#LiteBoxButtom").click(function () {
+                    closeErrorMessage();
+                });
+            } else if (response === "Error") {
+                LiteBoxShown("خطا", "خطا در ثبت پیام.", "#F1A9A0", true);
+                $("#LiteBoxButtom").click(function () {
+                    closeErrorMessage();
+                });
+            } else {
+                LiteBoxShown("خطا", response, "#F1A9A0", true);
+                $("#LiteBoxButtom").click(function () {
+                    closeErrorMessage();
+                });
+            }
+        }, true);
+    }
+</script>
